@@ -14,7 +14,7 @@ Muse has no public agent API. The way in is Meta's open-source
 which lets hobbyist devices talk to your Muse. It only supports Linux and ESP32, so
 `bridge/` ports its one Linux-only piece, Bluetooth pairing, to macOS CoreBluetooth
 and reuses the rest unchanged. Your Mac becomes the "gadget", and the watch talks to
-the Mac.
+the Mac. [How that works](docs/ARCHITECTURE.md).
 
 - **`bridge/`** (Python): pairs the Mac with Muse once, then keeps a Muse voice call
   open and relays watch turns into it. Unlike the SDK's `musegadget run`, it gives
@@ -248,6 +248,9 @@ Reconnect the iPhone and press ▶ in Xcode again.
 unlocked, the watch unlocked and close by, and Wi-Fi and Bluetooth on for all three.
 
 ## How it works
+
+The full story of how the Gadgets SDK runs on a Mac and a watch, which it doesn't
+support, is in **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**. In short:
 
 - **Pairing:** the Mac runs the SDK's real setup protocol over a CoreBluetooth
   peripheral (`bridge/src/musebridge/mac_ble.py`). The Muse app provisions a device
