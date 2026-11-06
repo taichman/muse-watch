@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "musebridge"
+version = "0.1.0"
+description = "Pair a Mac as a Muse gadget and bridge Apple Watch push-to-talk to Muse voice"
+requires-python = ">=3.10"
+dependencies = [
+    # Meta's Muse Gadgets SDK (Apache-2.0), pinned to the commit this bridge was written against.
+    "musegadget @ git+https://github.com/facebookincubator/muse-gadget-sdk@270e653066ed9d49fefca112054843f214775262#subdirectory=linux",
+    "pyobjc-framework-CoreBluetooth>=10; sys_platform == 'darwin'",
+    "aiohttp>=3.9",
+]
+
+[project.optional-dependencies]
+test = ["pytest", "pytest-asyncio"]
+
+[project.scripts]
+musebridge = "musebridge.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"

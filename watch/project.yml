@@ -1,0 +1,56 @@
+# Generate MuseWatch.xcodeproj with:  brew install xcodegen && xcodegen
+name: MuseWatch
+options:
+  bundleIdPrefix: com.example.musewatch  # change to your own reverse-DNS prefix
+  deploymentTarget:
+    watchOS: "10.0"
+configFiles:
+  Debug: Secrets.xcconfig
+  Release: Secrets.xcconfig
+settings:
+  base:
+    SWIFT_VERSION: "5.10"
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    CODE_SIGN_STYLE: Automatic
+targets:
+  MuseWatch:
+    type: application
+    platform: watchOS
+    sources: [MuseWatch/App]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(MUSE_BUNDLE_ID)
+        PRODUCT_NAME: Muse
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        INFOPLIST_KEY_CFBundleDisplayName: Muse
+    info:
+      path: MuseWatch/App/Info.plist
+      properties:
+        CFBundleDisplayName: Muse
+        WKApplication: true
+        WKWatchOnly: true
+        NSMicrophoneUsageDescription: Muse listens while you hold the talk button.
+        # The bridge is plain HTTP on your LAN or tailnet.
+        NSAppTransportSecurity:
+          NSAllowsArbitraryLoads: true
+        CFBundleURLTypes:
+          - CFBundleURLName: talk
+            CFBundleURLSchemes: [musewatch]
+        MuseBridgeURL: $(MUSE_BRIDGE_URL)
+        MuseBridgeSecret: $(MUSE_BRIDGE_SECRET)
+    dependencies:
+      - target: MuseWatchWidgets
+  MuseWatchWidgets:
+    type: app-extension
+    platform: watchOS
+    sources: [MuseWatch/Widgets]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(MUSE_BUNDLE_ID).widgets
+    info:
+      path: MuseWatch/Widgets/Info.plist
+      properties:
+        CFBundleDisplayName: Muse
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
